@@ -634,3 +634,14 @@ WHERE id IN (SELECT replaced_by_order FROM Orders WHERE customer_id = 1 AND repl
 -- 2. Display the replacer order id, customer and date of orders that are made before the beginning of May and are replaced.
 -- 3. Please revise the previous lessons.
 -- 4. Read about SQL Union for next session.
+
+-- home work solution
+SELECT id, customer_id, order_date, number
+FROM Orders
+WHERE id IN (SELECT replaced_by_order FROM Orders WHERE order_date < '2020-05-01' AND replaced_by_order IS NOT NULL)
+
+-- output
+id, customer_id, order_date,    number
+2	    2	    2020-02-02	    456
+3	    1	    2020-03-03	    789
+6	    1	    2020-06-06	    987
