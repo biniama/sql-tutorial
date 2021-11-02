@@ -570,12 +570,12 @@ Full outer join	orderitem on order_id = order_id
 Where 		orders.type is null or orderitem.id is null
 ```
 
-Lesson 6: Sub Query
--- WHY SUB QUERIES
--- 1. Easier to understand
--- 2. Less expensive interms of resource utilization like CPU, RAM, Network latency, ...
+## Lesson 6: Sub Query  
+#### WHY SUB QUERIES?
+1. Easier to understand
+2. Less expensive interms of resource utilization like CPU, RAM, Network latency, ...
 
-
+```sql
 -- DROP Table Orders
 CREATE TABLE Orders (
    id INT,
@@ -598,50 +598,55 @@ SELECT * FROM Orders
 SELECT number
 FROM Orders
 WHERE replaced_by_order = (SELECT orders.id FROM Orders WHERE number = 789)
+```
 
--- the following gives an error 'Ambiguous column name 'id'.' because id exists in both customer and Orders table.
+#### The following gives an error 'Ambiguous column name 'id'.' because id exists in both customer and Orders table.  
+```sql
 -- select id
 -- from customer
 -- join Orders on Orders.customer_id = customer.id
+```
 
-
--- show me orders that are replaced by 987
+Show me orders that are replaced by 987. 
+```
 SELECT number
 FROM Orders
 WHERE replaced_by_order = (SELECT id FROM Orders WHERE number = 987)
+```
 
-
-
-
--- show me the replacer order number and date of 
--- those that are ordered by customer 1 but are replaced by another order (i.e. the replacer)
+Show me the replacer order number and date of those that are ordered by customer 1 but are replaced by another order (i.e. the replacer).  
+```sql
 SELECT number, order_date
 FROM Orders
 WHERE id IN (SELECT replaced_by_order FROM Orders WHERE customer_id = 1 AND replaced_by_order IS NOT NULL)
+```
+OUTPUT  
+|number|order_date|  
+|---|---|  
+|456|2020-02-02|
+|987|2020-06-06|
 
--- OUTPUT
--- number       order_date
--- 456	        2020-02-02
--- 987	        2020-06-06
+##### Tips
+- understanding what is required - the question
+- understanding the table structure
+- understanding how to navigate across columns and rows to get to what you want to find
 
--- Tips
--- understanding what is required - the question
--- understanding the table structure
--- understanding how to navigate across columns and rows to get to what you want to find
+### HOME WORK
+1. Read about sub queries and their use and report back
+2. Display the replacer order id, customer and date of orders that are made before the beginning of May and are replaced.
+3. Please revise the previous lessons.
+4. Read about SQL Union for next session.
 
--- HOME WORK
--- 1. Read about sub queries and their use and report back
--- 2. Display the replacer order id, customer and date of orders that are made before the beginning of May and are replaced.
--- 3. Please revise the previous lessons.
--- 4. Read about SQL Union for next session.
-
--- home work solution
+### Home work solution
+```sql
 SELECT id, customer_id, order_date, number
 FROM Orders
 WHERE id IN (SELECT replaced_by_order FROM Orders WHERE order_date < '2020-05-01' AND replaced_by_order IS NOT NULL)
+```
 
--- output
-id, customer_id, order_date,    number
-2	    2	    2020-02-02	    456
-3	    1	    2020-03-03	    789
-6	    1	    2020-06-06	    987
+Output  
+|id|customer_id|order_date|number|  
+|---|---|---|---|  
+|2|2|2020-02-02|456|
+|3|1|2020-03-03|789|
+|6|1|2020-06-06|987|
